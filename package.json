@@ -1,0 +1,23 @@
+{
+  "name": "otomeyt-desktop",
+  "productName": "Otomeyt",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {
+    "child_process": "^1.0.2",
+    "electron-installer-dmg": "^0.2.1",
+    "electron-packager": "^9.0.1",
+    "electron-prebuilt": "^1.4.13",
+    "electron-winstaller": "^2.6.3"
+  },
+  "scripts": {
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./src/img/otomeyt.icns --prune=true --out=./release-builds",
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./src/img/otomeyt.ico --prune=true --out=./release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Otomeyt\"",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=./src/img/otomeyt.png --prune=true --out=./release-builds",
+    "create-installer-win": "node build-windows.js",
+    "create-installer-mac": "electron-installer-dmg ./release-builds/Otomeyt-darwin-x64/Otomeyt.app otomeyt-app --out=./release-builds/installers/mac --overwrite --icon=./src/img/otomeyt.icns"
+  },
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
