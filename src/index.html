@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OTOMEYT DESKTOP APPLICATION</title>
+    <base href="./" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=0"/>
+
+    <link rel="stylesheet" type="text/css" href="http://assets.ciab.compareglobal.co.uk/widgets/SNAPSHOT/iconia/style.css" />
+  </head>
+
+  <body class="cgg-body">
+     <script type="text/javascript">
+      var dir = (typeof(__dirname) != 'undefined') ? __dirname : '.';
+      var widget = document.createElement('cgg-funnel'),
+          params = {
+            "conf" : "local",
+            "lang" : "english" 
+          }, 
+          configFiles = {
+            "local" : dir+"/config/site/client/config.json"
+          },
+          langFiles = {
+            "english" : dir+"/config/site/language/english.json"
+          }
+      location.search.replace( new RegExp("([^?=&]+)(=([^&]*))?", "g"), function($0, $1, $2, $3) { params[$1] = $3; } );
+
+      widget.setAttribute('config', configFiles[params.conf.replace(new RegExp('/', 'g'),'')]);
+      widget.setAttribute('lang', langFiles[params.lang.replace(new RegExp('/', 'g'),'')]);
+
+      widget.innerHTML = '<div class="cgg-loader"></div>';
+
+      document.body.appendChild(widget);
+    </script> 
+    <!-- <cgg-funnel lang="/config/site/language/english.json" config="/config/site/client/config.json"><div class="cgg-loader"></div></cgg-funnel> -->
+  </body>
+</html>

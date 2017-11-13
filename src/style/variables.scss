@@ -1,0 +1,40 @@
+//colors
+$green: #77aa43 !default;
+$light-green: #CCDFB9 !default;
+$red: #ff533f !default;
+$blue: #056f9d !default;
+$black: #312f2d !default;
+$grey: #96918f !default;
+$light-grey: #F3F2EE !default;
+$border-grey: #e7e6e2 !default;
+$orange: #f2a43d !default;
+$light-orange: #f2ba8a !default;
+$dark-orange1: #f08227 !default; 
+$dark-orange2: #e45f2c !default;
+$yellow: #fdf59a !default;
+$dark-yellow: #f5e398 !default;
+
+//media queries
+// Extra small screen / phone (xs , 480)
+$screen-xs-1: 481px !default;
+$screen-xs-2: 480px !default;
+
+// Small screen / tablet (sm , 768)
+$screen-sm-1: 768px !default;
+$screen-sm-2: 767px !default;
+
+// Medium screen / desktop (md , 992)
+$screen-md-1: 991px !default;
+$screen-md-2: 992px !default;
+
+@mixin media($media) {
+    @if $media == display-xs {
+        @media only screen and (max-width: $screen-xs-2) { @content; }
+    }
+    @if $media == display-sm {
+        @media only screen and (min-width: $screen-sm-1) and (max-width: $screen-md-1) { @content; }
+    }
+    @if $media == display-md {
+        @media only screen and (min-width: $screen-md-2) { @content; }
+    }
+}

@@ -1,0 +1,18 @@
+{
+	"version": "1",
+	"companyName": "testCompany",
+	"clientName": "test name",
+	"isSubscribe": "true",
+	"dataBaseInformation": {
+		"user": "test-company-user",
+		"main": "test-company-db",
+		"host": "http://localhost:5984",
+		"userName": "test-company",
+		"password": "johnpaul"
+	},
+	"additionalInformation": {
+		"infoOne": "test-value-3",
+		"infoTwo": "test-value-2",
+		"infoThree": "test-value-1"
+	}
+}

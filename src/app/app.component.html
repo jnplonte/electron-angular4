@@ -1,0 +1,23 @@
+<!-- <div class="cgg-container app-component" *ngIf="formActive">
+  <div class="cgg-row">
+    <div class="cgg-col-md-8 cgg-col-sm-7 cgg-col-xs-12">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="cgg-col-md-4 cgg-col-sm-5 cgg-col-xs-12">
+      <cgg-form-information></cgg-form-information>
+      <cgg-form-promotion class="cgg-hidden-xs"></cgg-form-promotion>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="cgg-container app-component" *ngIf="appActive">
+  <div class="cgg-row">
+    <div class="cgg-col-md-12 cgg-col-sm-12 cgg-col-xs-12" *ngIf="configError">
+      PLEASE UPLOAD YOUR CONFIG FILE
+    </div>
+    <div class="cgg-col-md-12 cgg-col-sm-12 cgg-col-xs-12" *ngIf="!configError">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

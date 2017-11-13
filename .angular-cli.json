@@ -1,0 +1,40 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "project": {
+      "name": "funnelv2"
+    },
+    "apps": [
+      {
+        "root": "src",
+        "outDir": "dist",
+        "assets": [],
+        "index": "index.html",
+        "main": "main.ts",
+        "polyfills": "polyfills.ts",
+        "tsconfig": "tsconfig.json",
+        "scripts": [],
+        "styles": [
+          "style/styles.scss"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "style"
+          ]
+        },
+        "prefix": ""
+      }
+    ],
+    "defaults": {
+      "styleExt": "scss",
+      "directive": {
+        "flat": false
+      },
+      "pipe": {
+        "flat": false
+      },
+      "service": {
+        "flat": false
+      }
+    }
+  }
+  

@@ -10,7 +10,7 @@ getInstallerConfig()
 
 function getInstallerConfig () {
     console.log('creating windows installer')
-    const rootPath = path.join('./')
+    const rootPath = path.join('./', 'dist')
     const outPath = path.join(rootPath, 'release-builds')
 
     return Promise.resolve({
@@ -21,6 +21,6 @@ function getInstallerConfig () {
        exe: 'otomeyt.exe',
        setupExe: 'otomeytInstaller.exe',
        description: 'otomeyt desktop app',
-       setupIcon: path.join(rootPath, 'src', 'img', 'otomeyt.ico')
+       setupIcon: path.join(rootPath, 'config', 'electron', 'icons', '64x64.png')
    })
 }

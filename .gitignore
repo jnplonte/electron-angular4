@@ -1,3 +1,5 @@
 /node_modules
 /dist
 /release-builds
+/src/___app
+/___src

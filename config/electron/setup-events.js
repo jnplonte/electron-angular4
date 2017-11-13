@@ -19,12 +19,14 @@ module.exports = {
 
             try {
                 spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
-            } catch (error) {}
+            } catch (error) {
 
-                return spawnedProcess;
-            };
+            }
 
-            const spawnUpdate = function(args) {
+            return spawnedProcess;
+        };
+
+        const spawnUpdate = function(args) {
             return spawn(updateDotExe, args);
         };
 
