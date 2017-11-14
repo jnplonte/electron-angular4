@@ -12,5 +12,6 @@ import 'rxjs';
 import 'lodash';
 import 'crypto-js';
 import 'pouchdb';
+import 'pouchdb-find';
 
 import './style/styles.scss';

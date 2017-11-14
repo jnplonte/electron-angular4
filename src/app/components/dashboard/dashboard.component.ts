@@ -10,7 +10,7 @@ export class DashboardComponent implements OnInit {
   public people: Array<any>;
   public form: any;
 
-  constructor(@Inject('pouchService') private pouchService: any) {
+  constructor(@Inject('dataBaseMainService') private dataBaseMainService: any) {
       this.people = [];
       this.form = {
           'username': '',
@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.pouchService.fetch().then(result => {
+      this.dataBaseMainService.fetch().then(result => {
           this.people = [];
 
           for (let i: number = 0; i < result.rows.length; i++) {
@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
 
   insert() {
     if (this.form.username && this.form.firstname && this.form.lastname) {
-        let returnVal: any = this.pouchService.put(this.form.username, this.form);
+        let returnVal: any = this.dataBaseMainService.put(this.form.username, this.form);
         this.people.push(this.form);
 
         this.form = {
@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   }
 
   sync() {
-      this.pouchService.sync().then(results => {
+      this.dataBaseMainService.sync().then(results => {
           if (results) {
               console.log('success sync');
           }

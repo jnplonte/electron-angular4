@@ -1,7 +1,14 @@
 import { Injectable, EventEmitter, Inject } from '@angular/core';
 
 import PouchDB from 'pouchdb';
+import PouchFind from 'pouchdb-find';
+
+PouchDB.plugin(PouchFind);
 PouchDB.plugin(require('pouchdb-authentication'));
+
+if (process.env.ENV === 'development') {
+    PouchDB.debug.enable('pouchdb:find');
+}
 
 @Injectable()
 export class DataBaseMainService {

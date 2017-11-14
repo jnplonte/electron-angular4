@@ -5,7 +5,7 @@
 	"isSubscribe": "true",
 	"dataBaseInformation": {
 		"user": "test-company-user",
-		"main": "test-company-db",
+		"main": "test-company-main",
 		"host": "http://localhost:5984",
 		"userName": "test-company",
 		"password": "johnpaul"

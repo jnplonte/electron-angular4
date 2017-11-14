@@ -9,7 +9,7 @@ if (process.env.ENV === 'production') {
     enableProdMode();
 }
 
-let documentElm: any = document.querySelector('cgg-funnel');
+let documentElm: any = document.querySelector('app-otomeyt');
 
 ConfigService.loadInstance(documentElm.getAttribute('config'), documentElm.getAttribute('lang')).then(() => {
     platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err));
