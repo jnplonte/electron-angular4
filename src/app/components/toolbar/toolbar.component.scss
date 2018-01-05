@@ -1,0 +1,29 @@
+@import 'variables';
+
+.toolbar-component {
+    .spacer {
+        flex: 1 1 auto;
+    }
+    .user-title {
+        cursor: default;
+        margin: 0px 15px;
+        display: none;
+        @include media(display-sm) {
+            display: block;
+        }
+    }
+    .company-title {
+        font-weight: 600;
+        margin: 0px 15px;
+        text-decoration: none;
+        color: $white;
+        &:hover,
+        &:active {
+            text-decoration: none;
+            color: $white;
+        }
+    }
+    .mat-icon {
+        cursor: pointer;
+    }
+} 

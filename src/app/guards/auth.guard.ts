@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, @Inject('helperService') private helperService: any) {
+
+    }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let queryParams: Object = {};
 
-        if (localStorage.getItem('auth-token')) {
+        if (this.helperService.readStorage('auth-token')) {
             return true;
         }
 

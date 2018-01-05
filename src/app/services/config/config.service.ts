@@ -34,43 +34,44 @@ export class ConfigService {
                     if (xobj.status === 200) {
                         resolve(xobj.responseText);
                     } else {
-                        resolve('error');
+                        reject('error');
                     }
                 }
-            }
+            };
             xobj.send(null);
         });
     }
 
     public static loadInstance(jsonConfig: string, langConfig: string) {
         let promiseArray: Array<any> = [];
-        if (process.env.ENV === 'production') {
-            jsonConfig = jsonConfig.replace(/(.*)\.(.*?)$/, '$1') + '.txt';
-        }
+        // if (process.env.ENV === 'production') {
+        //     jsonConfig = jsonConfig.replace(/(.*)\.(.*?)$/, '$1') + '.txt';
+        // }
 
         promiseArray.push(this.getXMLHttp(jsonConfig));
         promiseArray.push(this.getXMLHttp(langConfig));
 
         return Promise.all(promiseArray).then(promiseValue => {
-            if (promiseValue[0] === 'error') {
-                this.setConfigData({'hasError': 'true'});
-            } else {
-                try {
-                    let encyptionConfigValue: Object = {};
-                    if (process.env.ENV === 'production') {
-                        let encyptionConfig: any  = CryptoJS.AES.decrypt(promiseValue[0] || '', this.encyptionKey);
-                        encyptionConfigValue = JSON.parse(encyptionConfig.toString(CryptoJS.enc.Utf8));
-                    } else {
-                        encyptionConfigValue = JSON.parse(promiseValue[0] || '');
-                    }
-                    this.setConfigData(encyptionConfigValue);
-                } catch (e) {
-                    this.setConfigData({'hasError': 'true'});
+            try {
+                let encyptionConfigValue: Object = {};
+                if (process.env.ENV === 'production') {
+                    let encyptionConfig: any  = CryptoJS.AES.decrypt(promiseValue[0] || '', this.encyptionKey);
+                    encyptionConfigValue = JSON.parse(encyptionConfig.toString(CryptoJS.enc.Utf8));
+                } else {
+                    encyptionConfigValue = JSON.parse(promiseValue[0] || '');
                 }
+                this.setConfigData(encyptionConfigValue);
+            } catch (e) {
+                this.setConfigData({'hasError': 'true'});
             }
 
             this.setEnvironment();
             this.setTranslation( (typeof(promiseValue[1]) !== 'undefined' ) ? JSON.parse(promiseValue[1]) : {});
+        }).catch(rejectValue => {
+            this.setConfigData({'hasError': 'true'});
+
+            this.setEnvironment();
+            this.setTranslation({});
         });
     }
 

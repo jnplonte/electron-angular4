@@ -1,18 +1,132 @@
 @import 'variables';
+@import 'bootstrap-reboot';
+@import 'bootstrap-grid';
+
 @import 'app-material';
 
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+$app-theme-primary: mat-palette($mat-blue, 700, 300, 900);
+$app-theme-accent: mat-palette($mat-cyan);
+$app-theme-warn: mat-palette($mat-deep-orange, A200);
+
+$app-theme: mat-light-theme(
+    $app-theme-primary,
+    $app-theme-accent,
+    $app-theme-warn
+);
+
+@include mat-core();
+
+.app-theme {
+    @include angular-material-theme($app-theme);
+    .loading-btn {
+        margin: auto;
+        circle{
+            stroke: $white;
+        }
+    }
+
+    .mat-drawer-container {
+        height: 100%;
+    }
+
+    .mat-tab-label:focus {
+        background-color: transparent !important;
+    }
+
+    .mat-progress-spinner {
+        display: inline-block;
+    }
 }
 
-.bold{
-  font-weight: 600
+
+.mat-datepicker-content {
+    background-color: $white;
+    color: $black;
+    .mat-button, 
+    .mat-icon-button {
+        background: transparent;
+        &:hover,
+        &:focus,
+        &:active {
+            outline: none;
+        }
+    }
+    .mat-calendar-body-cell-content {
+        border-color: transparent;
+    }
+    .mat-calendar-body-selected {
+        border-color: $grey;
+        background: $light-grey;
+    }
+    .mat-calendar-body-disabled {
+        color: $grey;
+    }
+    .mat-calendar-table-header tr:nth-child(2) .mat-calendar-table-header-divider {
+        border-bottom: 1px solid $black;
+    }
+    .mat-calendar-body-cell-content:hover {
+        background: $light-grey;
+    }
 }
 
-.padding-0{
-  padding: 0px;
+.mat-tab-body-content {
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
 }
 
-.app-loader{color:$grey;font-size:20px;margin:100px auto;width:1em;height:1em;border-radius:50%;position:relative;text-indent:-9999em;-webkit-animation:loader 1.3s infinite linear;animation:loader 1.3s infinite linear;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0)}@keyframes loader{0%,100%{box-shadow:0 -3em 0 0.2em,2em -2em 0 0em,3em 0 0 -1em,2em 2em 0 -1em,0 3em 0 -1em,-2em 2em 0 -1em,-3em 0 0 -1em,-2em -2em 0 0}12.5%{box-shadow:0 -3em 0 0,2em -2em 0 0.2em,3em 0 0 0,2em 2em 0 -1em,0 3em 0 -1em,-2em 2em 0 -1em,-3em 0 0 -1em,-2em -2em 0 -1em}25%{box-shadow:0 -3em 0 -0.5em,2em -2em 0 0,3em 0 0 0.2em,2em 2em 0 0,0 3em 0 -1em,-2em 2em 0 -1em,-3em 0 0 -1em,-2em -2em 0 -1em}37.5%{box-shadow:0 -3em 0 -1em,2em -2em 0 -1em,3em 0 0 0,2em 2em 0 0.2em,0 3em 0 0em,-2em 2em 0 -1em,-3em 0 0 -1em,-2em -2em 0 -1em}50%{box-shadow:0 -3em 0 -1em,2em -2em 0 -1em,3em 0 0 -1em,2em 2em 0 0em,0 3em 0 0.2em,-2em 2em 0 0,-3em 0 0 -1em,-2em -2em 0 -1em}62.5%{box-shadow:0 -3em 0 -1em,2em -2em 0 -1em,3em 0 0 -1em,2em 2em 0 -1em,0 3em 0 0,-2em 2em 0 0.2em,-3em 0 0 0,-2em -2em 0 -1em}75%{box-shadow:0 -3em 0 -1em,2em -2em 0 -1em,3em 0 0 -1em,2em 2em 0 -1em,0 3em 0 -1em,-2em 2em 0 0,-3em 0 0 0.2em,-2em -2em 0 0}87.5%{box-shadow:0 -3em 0 0,2em -2em 0 -1em,3em 0 0 -1em,2em 2em 0 -1em,0 3em 0 -1em,-2em 2em 0 0,-3em 0 0 0,-2em -2em 0 .2em}}
+.toolbar-component_user-menu {
+    background: $white;
+    .mat-menu-item {
+        text-decoration: none;
+        color: $black;
+        .mat-icon {
+            top: 7px;
+            position: relative;
+            vertical-align: initial;
+        }
+        &:hover,
+        &:active {
+            color: $blue;
+        }
+    }
+}
+
+
+.width-100 {
+    width: 100%;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+.elipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card {
+    background: $light-grey;
+    border-radius: 2px;
+    padding: 2.5em;
+}
+
+.card-box {
+    @extend .shadow-1;
+    &:hover {
+        @extend .shadow-2;
+    }
+}

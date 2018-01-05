@@ -1,1 +1,7 @@
-<div *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">{{message.text}}</div>
+<div role="alert" *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error', 'alert-warning': message.type === 'warning' }">
+    <button type="button" class="close-alert" (click)="onClose()">×</button>
+    <p>
+        <mat-icon *ngIf="message.type" svgIcon="{{message.type}}"></mat-icon>
+        {{message.text}}
+    </p>
+</div>

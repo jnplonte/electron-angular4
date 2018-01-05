@@ -10,19 +10,19 @@ if (!shell.which('ng')) {
 
 switch (variable[0]) {
     case 'component':
-        ngScript = 'ng generate component components/'+ variable[1];
+        ngScript = 'ng generate component components/'+ variable[1] + ' --module=app.module';
     break;
 
     case 'directive':
-        ngScript = 'ng generate directive directives/'+ variable[1];
+        ngScript = 'ng generate directive directives/'+ variable[1] + ' --module=app.module';
     break;
 
     case 'pipe':
-        ngScript = 'ng generate pipe pipes/'+ variable[1];
+        ngScript = 'ng generate pipe pipes/'+ variable[1] + ' --module=app.module';
     break;
 
     case 'service':
-        ngScript = 'ng generate service services/'+ variable[1];
+        ngScript = 'ng generate service services/'+ variable[1] + ' --module=app.module';
     break;
 }
 

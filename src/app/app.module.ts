@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { BrowserModule, Title } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
+import { MATERIAL_SANITY_CHECKS } from '@angular/material';
+
+import { MaterialModule } from './material.module';
 
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule, JsonpModule } from '@angular/http';
@@ -23,9 +26,13 @@ import { UnAuthGuard } from './guards/un-auth.guard';
 
 import { LogInComponent } from './components/log-in/log-in.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { GuideComponent } from './components/guide/guide.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { UserService } from './services/user/user.service';
 
 export class jsonTranslateLoader implements TranslateLoader {
     private translation: Object = {};
@@ -42,10 +49,14 @@ export class jsonTranslateLoader implements TranslateLoader {
 }
 
 const appRoutes: Routes = [
-    { path: '', component: DashboardComponent, canActivate: [AuthGuard]},
-    { path: 'log-in', component: LogInComponent, canActivate: [UnAuthGuard] },
+    { path: '', component: DashboardComponent, canActivate: [AuthGuard], data: {title: 'Dashboard'}},
+    { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: {title: 'Profile'}},
+    { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], data: {title: 'Settings'}},
+    { path: 'guide', component: GuideComponent, canActivate: [AuthGuard], data: {title: 'Guide'}},
 
-    { path: '**', component: PageNotFoundComponent }
+    { path: 'log-in', component: LogInComponent, canActivate: [UnAuthGuard], data: {title: 'Log In'} },
+
+    { path: '**', component: PageNotFoundComponent, data: {title: 'Page Not Found'} }
 ];
 
 const appTranslate: Object = {
@@ -56,24 +67,29 @@ const appTranslate: Object = {
 };
 
 @NgModule({
-  imports:      [ BrowserModule,
+  imports:      [ BrowserAnimationsModule,
+                  BrowserModule,
+
+                  MaterialModule,
+
                   HttpModule,
                   JsonpModule,
                   FormsModule,
                   ReactiveFormsModule,
-                  BrowserAnimationsModule,
                   HttpClientModule,
                   TranslateModule.forRoot(appTranslate),
-                  RouterModule.forRoot(appRoutes) ],
+                  RouterModule.forRoot(appRoutes, { useHash: true }) ],
   declarations: [ AppComponent,
-                  LogInComponent, PageNotFoundComponent, ForgotPasswordComponent, DashboardComponent, AlertComponent ],
-  providers:    [ AuthGuard, UnAuthGuard,
+                  LogInComponent, PageNotFoundComponent, DashboardComponent, AlertComponent, ToolbarComponent, SettingsComponent, GuideComponent, ProfileComponent ],
+  providers:    [ AuthGuard, UnAuthGuard, Title,
                   {provide: 'configService', useFactory: () => ConfigService.getInstance()},
                   {provide: 'dataBaseMainService', useClass: DataBaseMainService},
                   {provide: 'dataBaseUserService', useClass: DataBaseUserService},
                   {provide: 'helperService', useClass: HelperService},
                   {provide: 'alertService', useClass: AlertService},
-                  {provide: 'authenticationService', useClass: AuthenticationService}
+                  {provide: 'authenticationService', useClass: AuthenticationService},
+                  {provide: MATERIAL_SANITY_CHECKS,  useValue: false},
+                  {provide: 'userService', useClass: UserService}
                 ],
   bootstrap:    [ AppComponent ]
 })

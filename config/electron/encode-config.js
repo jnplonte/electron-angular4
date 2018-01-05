@@ -3,7 +3,8 @@ const fs = require('fs'),
       process = require('process');
       CryptoJS = require('crypto-js');
 
-const configFiles = './dist/config/site/client';
+const configFiles = './config/site/client';
+const configClient = './release-config';
 
 fs.readdir( configFiles, function( err, files ) {
     if (err) {
@@ -19,12 +20,26 @@ fs.readdir( configFiles, function( err, files ) {
                 process.exit(1);
             }
             var encryptedConfig = CryptoJS.AES.encrypt(data, 'otomeyt-secret-key').toString();
-            fs.writeFile(path.join( configFiles, file.replace(/(.*)\.(.*?)$/, '$1') + '.txt' ), encryptedConfig, function(err) {
+
+            if (!fs.existsSync(configClient)){ 
+                fs.mkdir(configClient, () => {
+                    fs.chmod(configClient, 0775);
+                });  
+            }
+            
+            fs.writeFile(path.join( configClient, file.replace(/(.*)\.(.*?)$/, '$1') + '.otmyt' ), encryptedConfig, function(err) {
                 if (err) {
-                    console.error( 'Error writing file.', err );
+                    console.error( 'Error writing otmyt file.', err );
                     process.exit(1);
                 }
-            }); 
+            });
+            
+            // fs.writeFile(path.join( configFiles, file.replace(/(.*)\.(.*?)$/, '$1') + '.txt' ), encryptedConfig, function(err) {
+            //     if (err) {
+            //         console.error( 'Error writing txt file.', err );
+            //         process.exit(1);
+            //     }
+            // }); 
         });
     });
 });

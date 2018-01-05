@@ -1,0 +1,14 @@
+@import 'variables';
+
+.login-component {
+    margin-top: 3em;
+    .login-component_form-field {
+        width: 100%;
+    }
+    .login-component_form-button {
+        margin-top: $base-margin;
+    }
+    .sync-btn {
+        text-decoration: none;
+    }
+}

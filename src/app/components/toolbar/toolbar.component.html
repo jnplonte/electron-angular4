@@ -1,0 +1,24 @@
+<div class="toolbar-component" *ngIf="isVisible">
+    <mat-toolbar color="primary">
+        <mat-icon svgIcon="menu" (click)="sidenavRef.toggle()"></mat-icon>
+        <a href="javascript:void(0);" [routerLink]="['/']" class="company-title">{{companyName}}</a>
+        <span class="spacer"></span>
+        <span class="user-title elipsis">{{userName}} | <small>{{clock | async | date:'MMM d, y h:mm a'}}</small></span>
+        <mat-icon svgIcon="more_vert" [matMenuTriggerFor]="menu"></mat-icon>
+        <mat-menu #menu="matMenu" class="toolbar-component_user-menu">
+            <a href="javascript:void(0);" [routerLink]="['/profile']" mat-menu-item>
+                <mat-icon svgIcon="face"></mat-icon><span>Profile</span>
+            </a>
+            <a href="javascript:void(0);" [routerLink]="['/settings']" mat-menu-item>
+                <mat-icon svgIcon="settings"></mat-icon><span>Settings</span>
+            </a>
+            <a href="javascript:void(0);" [routerLink]="['/guide']" mat-menu-item>
+                <mat-icon svgIcon="help"></mat-icon><span>Guide</span>
+            </a>
+            <hr class="no-margin" />
+            <a href="javascript:void(0);" (click)="onLogOut()" mat-menu-item>
+                <mat-icon svgIcon="exit"></mat-icon><span>Logout</span>
+            </a>
+        </mat-menu>
+    </mat-toolbar>
+</div>

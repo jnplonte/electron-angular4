@@ -1,0 +1,81 @@
+<div class="settings-component">
+  <mat-tab-group class="card">
+    <mat-tab label="Profile Settings">
+      <div class="profile-tab">
+        <form name="profile-settings-form" (ngSubmit)="onUpdateSettings('profile', profileForm)" [formGroup]="profileForm" class="profile-settings-form row no-margin" novalidate autocomplete="off">
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <input matInput placeholder="Company Name" name="companyName" formControlName="companyName">
+          </mat-form-field>
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <mat-select placeholder="Position" name="position" formControlName="position">
+              <mat-option value="admin">Administrator</mat-option>
+              <mat-option value="manager">Manager</mat-option>
+              <mat-option value="employee">Employee</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6" [hideRequiredMarker]="true">
+            <input matInput placeholder="First Name" name="firstName" formControlName="firstName" required>
+            <mat-error [hidden]="isValid('firstName', profileForm)"><strong>Invalid</strong> First Name</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6" [hideRequiredMarker]="true">
+            <input matInput placeholder="Last Name" name="lastName" formControlName="lastName" required>
+            <mat-error [hidden]="isValid('lastName', profileForm)"><strong>Invalid</strong> Last Name</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6" [hideRequiredMarker]="true">
+            <input matInput placeholder="Email Address" name="emailAddress" formControlName="emailAddress" required>
+            <mat-error [hidden]="isValid('emailAddress', profileForm)"><strong>Invalid</strong> Email Address</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-12 col-sm-12 col-md-3 col-lg-3" [hideRequiredMarker]="true">
+            <input type="number" matInput placeholder="Contact Number" name="contactNumber" formControlName="contactNumber" required>
+            <mat-error [hidden]="isValid('contactNumber', profileForm)"><strong>Invalid</strong> Contact Number</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-12 col-sm-12 col-md-3 col-lg-3" [hideRequiredMarker]="true">
+              <input matInput [matDatepicker]="bday" [max]="maxDate" placeholder="Date of Birth" name="birthDate" formControlName="birthDate" required [readonly]="true">
+              <mat-datepicker-toggle matSuffix [for]="bday"></mat-datepicker-toggle>
+              <mat-datepicker #bday startView="year"></mat-datepicker>
+              <mat-error [hidden]="isValid('birthDate', profileForm)"><strong>Invalid</strong> Date of Birth</mat-error>
+          </mat-form-field>
+        
+           <mat-form-field class="col-12" [hideRequiredMarker]="true">
+            <input matInput placeholder="Address" name="address" formControlName="address" required>
+            <mat-error [hidden]="isValid('address', profileForm)"><strong>Invalid</strong> Address</mat-error>
+          </mat-form-field>
+
+          <div class="col-12">
+            <button type="submit" [disabled]="!profileForm.valid && !loading" mat-raised-button color="primary" class="profile-settings-btn">
+              <mat-spinner [hidden]="!loading" class="loading-btn" [diameter]="25"></mat-spinner>
+              <span [hidden]="loading">Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="Account Settings">
+      <div class="account-tab">
+        <form name="account-settings-form" (ngSubmit)="onUpdateSettings('account', accountForm)" [formGroup]="accountForm" class="account-settings-form row no-margin" novalidate autocomplete="off">
+          <mat-form-field class="col-12">
+            <input matInput placeholder="User Name" name="username" formControlName="username">
+          </mat-form-field>
+
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6" [hideRequiredMarker]="true">
+            <input type="password" matInput placeholder="Password" name="password" formControlName="password" required>
+            <mat-error [hidden]="isValid('password', accountForm)"><strong>Invalid</strong> Password</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-12 col-sm-12 col-md-6 col-lg-6" [hideRequiredMarker]="true">
+            <input type="password" matInput placeholder="Confirm Password" name="confirmPassword" formControlName="confirmPassword" required>
+            <mat-error [hidden]="isValid('confirmPassword', accountForm)"><strong>Invalid</strong> Confirm Password</mat-error>
+          </mat-form-field>
+
+          <div class="col-12">
+            <button mat-raised-button [disabled]="!accountForm.valid && !loading" color="primary" class="account-settings-btn">
+              <mat-spinner [hidden]="!loading" class="loading-btn" [diameter]="25"></mat-spinner>
+              <span [hidden]="loading">Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

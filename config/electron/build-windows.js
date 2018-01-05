@@ -1,17 +1,17 @@
-const createWindowsInstaller = require('electron-winstaller').createWindowsInstaller
-const path = require('path')
+const createWindowsInstaller = require('electron-winstaller').createWindowsInstaller;
+const path = require('path');
 
 getInstallerConfig()
      .then(createWindowsInstaller)
      .catch((error) => {
      console.error(error.message || error)
      process.exit(1)
- })
+});
 
 function getInstallerConfig () {
-    console.log('creating windows installer')
-    const rootPath = path.join('./', 'dist')
-    const outPath = path.join(rootPath, 'release-builds')
+    console.log('creating windows installer');
+    const rootPath = path.join('./', 'dist');
+    const outPath = path.join('./', 'release-builds');
 
     return Promise.resolve({
        appDirectory: path.join(outPath, 'Otomeyt-win32-ia32'),
@@ -21,6 +21,7 @@ function getInstallerConfig () {
        exe: 'otomeyt.exe',
        setupExe: 'otomeytInstaller.exe',
        description: 'otomeyt desktop app',
-       setupIcon: path.join(rootPath, 'config', 'electron', 'icons', '64x64.png')
-   })
+       setupIcon: path.join(rootPath, 'config', 'electron', 'icons', 'otomeyt.ico'),
+       iconUrl: path.join(rootPath, 'config', 'electron', 'icons', '64x64.png')
+   });
 }

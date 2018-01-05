@@ -1,0 +1,86 @@
+@import 'variables';
+
+.alert {
+    min-width: 320px;
+    width: 100%;
+    padding: $base-padding;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    position: absolute;
+    right: 0px;
+    z-index: 1024;
+    @extend .shadow-1;
+    @include media(display-sm) {
+        width: auto;
+        margin-right: -15px;
+        margin-left: -15px;
+        right: 15px;
+    }
+    @include media(display-md) {
+        width: auto;
+        margin-right: -15px;
+        margin-left: -15px;
+        right: 15px;
+    }
+    @include media(display-lg) {
+        width: auto;
+        margin-right: -15px;
+        margin-left: -15px;
+        right: 15px;
+    }
+    &:hover{
+      @extend .shadow-2;
+    }
+    &-success{
+      background-color: lighten($green, 15%);
+      border-color: lighten($green, 10%);
+      color: darken($green, 15%);
+      mat-icon{
+        color: darken($green, 15%);
+      }
+    }
+    &-warning{
+      background-color: lighten($orange, 15%);
+      border-color: lighten($orange, 10%);
+      color: darken($orange, 15%);
+      mat-icon{
+        color: darken($orange, 15%);
+      }
+    }
+    &-danger{
+      background-color: lighten($red, 15%);
+      border-color: lighten($red, 10%);
+      color: darken($red, 15%);
+      mat-icon{
+        color: darken($red, 15%);
+      }
+    }
+    p{
+      padding: 0;
+      margin: 0;
+    }
+    mat-icon{
+      vertical-align: middle;
+      padding: 0px 3px 2px 0px;
+    }
+    .close-alert{
+      -webkit-appearance: none;
+      position: relative;
+      float: right;
+      padding: 0;
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+      background: 0 0;
+      font-size: 21px;
+      line-height: 1;
+      font-weight: bold;
+      text-shadow: 0 1px 0 rgba(255,255,255,.7);
+      filter: alpha(opacity=40);
+      opacity: .4;
+      &:hover{
+        filter: alpha(opacity=70);
+        opacity: .7;
+      }
+    }
+  }

@@ -1,0 +1,19 @@
+@import 'variables';
+
+.settings-component {
+    margin-top: $base-margin;
+    .account-settings-form,
+    .profile-settings-form {
+        margin-top: $base-margin;
+    }
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        display: none;
+    }
+    .account-settings-btn,
+    .profile-settings-btn {
+        max-width: 138px;
+        width: 100%;
+        float: right;
+    }
+}

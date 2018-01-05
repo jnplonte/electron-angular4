@@ -1,40 +1,123 @@
+//pixels
+$base-font-size: 14px !default;
+$base-padding-right: 15px !default;
+$base-padding-left: 15px !default;
+
+$base-padding: 1.25em !default;
+$base-margin: 1.25em !default;
+
+$base-width-sm: 540px !default;
+$base-width-md: 720px !default;
+$base-width-lg: 960px !default;
+$base-width-xl: 1140px !default;
+
+//shadow
+.shadow-1{
+    box-shadow: 0 1px 3px rgba(#000, .12), 0 1px 2px rgba(#000, .24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.shadow-2{
+    box-shadow: 0 3px 6px rgba(#000, .16), 0 3px 6px rgba(#000, .23) ;
+}
+
+
 //colors
 $green: #77aa43 !default;
 $light-green: #CCDFB9 !default;
+
 $red: #ff533f !default;
+
 $blue: #056f9d !default;
+$light-blue: #00A0E5 !default;
+
 $black: #312f2d !default;
+
 $grey: #96918f !default;
 $light-grey: #F3F2EE !default;
 $border-grey: #e7e6e2 !default;
+
 $orange: #f2a43d !default;
 $light-orange: #f2ba8a !default;
 $dark-orange1: #f08227 !default; 
 $dark-orange2: #e45f2c !default;
+
 $yellow: #fdf59a !default;
 $dark-yellow: #f5e398 !default;
 
-//media queries
-// Extra small screen / phone (xs , 480)
-$screen-xs-1: 481px !default;
-$screen-xs-2: 480px !default;
+$white: #ffffff !default;
 
-// Small screen / tablet (sm , 768)
-$screen-sm-1: 768px !default;
-$screen-sm-2: 767px !default;
 
-// Medium screen / desktop (md , 992)
-$screen-md-1: 991px !default;
-$screen-md-2: 992px !default;
+//media query
+$media-sm: 576px !default;
+$media-md: 768px !default;
+$media-lg: 992px !default;
+$media-xl: 1200px !default;
 
+//usage
+//@include media(display-sm) {
+// custom style here
+//}
 @mixin media($media) {
-    @if $media == display-xs {
-        @media only screen and (max-width: $screen-xs-2) { @content; }
-    }
     @if $media == display-sm {
-        @media only screen and (min-width: $screen-sm-1) and (max-width: $screen-md-1) { @content; }
+        @media only screen and (min-width: $media-sm) { @content; }
     }
     @if $media == display-md {
-        @media only screen and (min-width: $screen-md-2) { @content; }
+        @media only screen and (min-width: $media-md) { @content; }
+    }
+    @if $media == display-lg {
+        @media only screen and (min-width: $media-lg) { @content; }
+    }
+    @if $media == display-xl {
+        @media only screen and (min-width: $media-xl) { @content; }
     }
 }
+
+//usage
+// str-replace($string, 'e', 'xoxo');
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index(to-string($string), $search);
+
+    @if $index {
+        @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+
+    @return $string;
+}
+
+//usage to-string(abcd); 
+@function to-string($value) {
+    @return inspect($value);
+}
+
+//usage to-number("12345"); 
+@function to-number($value) {
+    @if type-of($value) == 'number' {
+      @return $value;
+    } @else if type-of($value) != 'string' {
+      $_: log('Value for `to-number` should be a number or a string.');
+    }
+    
+    $result: 0;
+    $digits: 0;
+    $minus: str-slice($value, 1, 1) == '-';
+    $numbers: ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
+    
+    @for $i from if($minus, 2, 1) through str-length($value) {
+      $character: str-slice($value, $i, $i);
+      
+      @if not (index(map-keys($numbers), $character) or $character == '.') {
+        @return to-length(if($minus, -$result, $result), str-slice($value, $i))
+      }
+      
+      @if $character == '.' {
+        $digits: 1; 
+      } @else if $digits == 0 {
+        $result: $result * 10 + map-get($numbers, $character);  
+      } @else {
+        $digits: $digits * 10;
+        $result: $result + map-get($numbers, $character) / $digits;
+      }
+    }
+    
+    @return if($minus, -$result, $result);
+  }

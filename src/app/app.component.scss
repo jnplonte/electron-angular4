@@ -1,5 +1,13 @@
 @import 'variables';
 
 .app-component {
-  background: $light-grey;
-}
+    height:100%;
+    .alert-container {
+        position: relative;
+        display: block;
+    }
+    .side-nav {
+        padding: $base-padding;
+        min-width: 200px;
+    }
+} 

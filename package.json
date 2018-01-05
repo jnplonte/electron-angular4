@@ -1,7 +1,7 @@
 {
   "name": "otomeyt-desktop",
-  "productName": "Otomeyt Desktop Application",
-  "productTeam": "Otomeyt Team",
+  "description": "Otomeyt Desktop Application",
+  "team": "Otomeyt Team",
   "version": "1.0.0",
   "main": "./dist/main-site.js",
   "devDependencies": {
@@ -14,11 +14,9 @@
     "child_process": "^1.0.2",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
-    "electron-installer-dmg": "^0.2.1",
-    "electron-packager": "^9.0.1",
-    "electron-prebuilt": "^1.4.13",
-    "electron-winstaller": "^2.6.3",
-    "extract-text-webpack-plugin": "2.0.0-beta.5",
+    "electron": "^1.7.9",
+    "electron-builder": "^19.46.9",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.16.1",
@@ -31,6 +29,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.1",
+    "leveldown": "^2.1.0",
     "node-sass": "^4.5.3",
     "null-loader": "^0.1.1",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
@@ -62,33 +61,29 @@
     "crypto-js": "^3.1.9-1",
     "fs": "0.0.1-security",
     "fs-extra": "^4.0.2",
+    "hazardous": "^0.3.0",
     "lodash": "^4.17.4",
     "path": "^0.12.7",
     "pouchdb": "^6.3.4",
     "pouchdb-authentication": "^0.5.5",
-    "pouchdb-browser": "^6.3.4",
     "pouchdb-find": "^6.3.4",
     "rxjs": "^5.5.2",
     "typescript": "^2.6.1",
     "zone.js": "^0.8.12"
   },
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "start": "webpack-dev-server --config ./config/webpack.dev.js --inline --progress",
-    "start:electron": "electron .",
+    "start:electron": "electron . --enable-logging",
     "test": "karma start ./config/karma.common.js",
     "lint": "tslint --type-check --project 'src/tsconfig.json' --config 'tslint.json'",
-    "prebuild": "rimraf dist",
-    "build": "webpack --config ./config/webpack.prod.js --progress --profile --bail",
-    "postbuild": "node ./config/electron/encode-config.js",
+    "build": "rimraf dist && webpack --config ./config/webpack.prod.js --progress --profile --bail && node ./config/electron/encode-config.js",
     "generate:component": "node ./config/generate.js \"component\"",
     "generate:directive": "node ./config/generate.js \"directive\"",
     "generate:pipe": "node ./config/generate.js \"pipe\"",
     "generate:service": "node ./config/generate.js \"service\"",
-    "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=./config/electron/icons/otomeyt.icns --prune=true --out=./dist/release-builds",
-    "package:win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./config/electron/icons/otomeyt.ico --prune=true --out=./dist/release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Otomeyt\"",
-    "package:linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=./config/electron/icons/otomeyt.ico --prune=true --out=./dist/release-builds",
-    "create:installer-win": "node ./dist/build-windows.js",
-    "create:installer-mac": "electron-installer-dmg ./dist/release-builds/Otomeyt-darwin-x64/Otomeyt.app otomeyt-app --out=./dist/release-builds/installers/mac --overwrite --icon=./config/electron/icons/otomeyt.icns"
+    "release:lnx": "rimraf dist && webpack --config ./config/webpack.prod.js --progress --profile --bail && build -l",
+    "release:win": "build -w"
   },
   "keywords": [
     "nodejs",
@@ -97,5 +92,49 @@
     "typescript"
   ],
   "author": "John Paul Onte <jnpl.onte@gmail.com>",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jnplonte/electron-angular4.git"
+  },
+  "license": "MIT",
+  "build": {
+    "appId": "app.otomeyt.desktop",
+    "asarUnpack": [
+      "./dist/config/site/**/*"
+    ],
+    "files": [
+      "./dist/**/*",
+      "./node_modules/**/*",
+      "./package.json"
+    ],
+    "directories": {
+      "buildResources": "./dist/config/electron",
+      "output": "./release-builds"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "./dist/config/electron/icons",
+      "description": "Otomeyt Desktop Application",
+      "category": "GNOME;GTK;Utility;Office"
+    },
+    "deb": {
+      "synopsis": "Otomeyt Desktop Application"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "./dist/config/electron/icons/otomeyt.ico"
+    },
+    "nsis": {
+      "perMachine": true,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
 }

@@ -1,0 +1,9 @@
+@import 'variables';
+
+.pagenotfoud-component {
+    margin-top: $base-margin;
+    .back-btn {
+        margin-top: $base-margin;
+        text-decoration: none;  
+    }
+}

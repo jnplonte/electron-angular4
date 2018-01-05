@@ -52,7 +52,7 @@ module.exports = {
       {
         test: /\.scss$/,
         include: helpers.root('src', 'style'),
-        loader: ExtractTextPlugin.extract({ fallbackLoader: "style-loader", loader: "css-loader!sass-loader"})
+        loader: ExtractTextPlugin.extract({ fallback: "style-loader", use: "css-loader!sass-loader"})
       }
     ]
   },
@@ -60,11 +60,12 @@ module.exports = {
   plugins: [
     // Workaround for angular/angular#11580
     new webpack.ContextReplacementPlugin(
+      /\@angular(\\|\/)core(\\|\/)esm5/,
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       // /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      /angular(\\|\/)core(\\|\/)@angular/,
-      helpers.root('src'), // location of your src
-      {} // a map of your routes
+      // /angular(\\|\/)core(\\|\/)@angular/,
+      helpers.root('src') // location of your src
+      // {} // a map of your routes
     ),
 
     new webpack.optimize.CommonsChunkPlugin({

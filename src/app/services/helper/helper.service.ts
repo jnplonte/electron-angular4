@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import { TranslateService } from '@ngx-translate/core';
+// import { TranslateService } from '@ngx-translate/core';
 
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
 
-import * as CryptoJS from 'crypto-js';
+// import * as CryptoJS from 'crypto-js';
+
+import * as _ from 'lodash';
 
 @Injectable()
 export class HelperService {
-    private dataObservers: Array<any> = [];
+    // private dataObservers: Array<any> = [];
 
-    constructor (private http: Http, private translate: TranslateService) {
+    // constructor (private http: Http, private translate: TranslateService) {
 
-    }
+    // }
 
-    generateRandomID() {
-        let currentDate: string = (new Date()).valueOf().toString();
-        let random: string = Math.random().toString();
-        return CryptoJS.MD5(currentDate + random).toString();
-    }
+    // generateRandomID() {
+    //     let currentDate: string = (new Date()).valueOf().toString();
+    //     let random: string = Math.random().toString();
+    //     return CryptoJS.MD5(currentDate + random).toString();
+    // }
 
     formatCurrency(value?: any, pattern: any = ',') {
         if (value) {
@@ -60,7 +62,7 @@ export class HelperService {
         return response;
     }
 
-    createStorage(name: string, value: any, param: string = 'local') {
+    createStorage(name: string, value: any, param: string = 'session') {
       let returnValue: boolean = false;
       if (localStorage) {
           value = this.toString(value);
@@ -80,7 +82,7 @@ export class HelperService {
       return returnValue;
     }
 
-    readStorage(name: string, param: string = 'local') {
+    readStorage(name: string, param: string = 'session') {
         let returnValue: any = '';
         if (localStorage) {
             switch (param) {
@@ -99,7 +101,7 @@ export class HelperService {
         return this.toJson(returnValue);
     }
 
-    eraseStorage(name: string, param: string = 'local') {
+    eraseStorage(name: string, param: string = 'session') {
         let returnValue: boolean = false;
         if (localStorage) {
             switch (param) {
@@ -118,7 +120,7 @@ export class HelperService {
         return returnValue;
     }
 
-    clearStorage(param: string = 'local') {
+    clearStorage(param: string = 'session') {
         let returnValue: boolean = false;
         if (localStorage) {
             switch (param) {
@@ -137,38 +139,70 @@ export class HelperService {
         return returnValue;
     }
 
-    getData(url: string) {
-        if (this.dataObservers[url]) {
-            return this.dataObservers[url];
-        }
+    formatDate(date: Date) {
+        let month: string = (date.getMonth() + 1).toString(),
+            day: string = date.getDate().toString(),
+            year: string = date.getFullYear().toString();
 
-        let headers: any = new Headers();
-        headers.append('Content-Type', 'application/json');
+        if (month.length < 2) { month = '0' + month; }
+        if (day.length < 2) { day = '0' + day; }
 
-        let observable: Observable<any> = this.http.get(url, {
-           headers: headers
-        })
-        .map((response: Response) =>  {
-            if (response.status === 200) {
-                return response.json();
+        return [month, day, year].join('-');
+    }
+
+    cleanData(data: any) {
+        if (typeof(data) === 'object') {
+            _.forEach(data, (value, key) => {
+                if (typeof(value) === 'object') {
+                    this.cleanData(value);
+                } else {
+                    if (typeof(value.replace) !== 'undefined') {
+                        data[key] = value.replace(/[^A-Za-z0-9 @._,-]/g, '').trim();
+                    }
+                }
+            });
+            return data;
+        } else {
+            if (typeof(data.replace) !== 'undefined') {
+                return data.replace(/[^A-Za-z0-9 @._,-]/g, '').trim();
             } else {
-                return {};
+                return data;
             }
-        }).share();
-
-        return this.dataObservers[url] = observable;
+        }
     }
 
-    getResultsUrl(url: string, parameters: Array<string> = []) {
-        let urlString: string = '?comingFromFunnel=1&' + Object.keys(parameters).map(param => {
-            return [param, parameters[param]].map(encodeURIComponent).join('=');
-        }).join('&');
+    // getData(url: string) {
+    //     if (this.dataObservers[url]) {
+    //         return this.dataObservers[url];
+    //     }
 
-        let categoryUrl: string = '';
-        this.translate.get('widget.results.' + (typeof(parameters['category']) !== 'undefined' ? parameters['category'] : 'default')).subscribe((res: string) => {
-            categoryUrl = res;
-        });
+    //     let headers: any = new Headers();
+    //     headers.append('Content-Type', 'application/json');
 
-        return url + categoryUrl + urlString;
-    }
+    //     let observable: Observable<any> = this.http.get(url, {
+    //        headers: headers
+    //     })
+    //     .map((response: Response) =>  {
+    //         if (response.status === 200) {
+    //             return response.json();
+    //         } else {
+    //             return {};
+    //         }
+    //     }).share();
+
+    //     return this.dataObservers[url] = observable;
+    // }
+
+    // getResultsUrl(url: string, parameters: Array<string> = []) {
+    //     let urlString: string = '?comingFromFunnel=1&' + Object.keys(parameters).map(param => {
+    //         return [param, parameters[param]].map(encodeURIComponent).join('=');
+    //     }).join('&');
+
+    //     let categoryUrl: string = '';
+    //     this.translate.get('widget.results.' + (typeof(parameters['category']) !== 'undefined' ? parameters['category'] : 'default')).subscribe((res: string) => {
+    //         categoryUrl = res;
+    //     });
+
+    //     return url + categoryUrl + urlString;
+    // }
 }

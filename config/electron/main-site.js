@@ -1,11 +1,12 @@
 const electron = require('electron'), path = require('path'), fs = require('fs-extra');
 
-const SetupEvents = require('./setup-events'), pjson = require('./../package.json');
+// const SetupEvents = require('./setup-events');
+const pjson = require('./../package.json');
 
-if (SetupEvents.handleSquirrelEvent()) {
-    // squirrel event handled and app will exit in 1000ms, so don't do anything else
-    return;
-}
+// if (SetupEvents.handleSquirrelEvent()) {
+//     // squirrel event handled and app will exit in 1000ms, so don't do anything else
+//     return;
+// }
 
 // Module to control application life.
 const app = electron.app, menu = electron.Menu, dialog = electron.dialog;
@@ -18,167 +19,169 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow() {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-      titleBarStyle: 'hidden',
-      width: 1200,
-      height: 650,
-      icon: path.join(__dirname, 'config', 'electron', 'icons', '64x64.png'),
-      title: pjson.productName
-  });
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        titleBarStyle: 'hidden',
+        width: 1200,
+        height: 650,
+        icon: path.join(__dirname, 'config', 'electron', 'icons', '64x64.png'),
+        title: pjson.description
+    });
 
-  mainWindow.maximize();
+    mainWindow.maximize();
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
+    // and load the index.html of the app.
+    mainWindow.loadURL(`file://${__dirname}/index.html`);
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools();
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
-      // Dereference the window object, usually you would store windows
-      // in an array if your app supports multi windows, this is the time
-      // when you should delete the corresponding element.
-      mainWindow = null
-  });
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function() {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null;
+    });
 
-  const template = [
-    {
-        label: 'File',
-        submenu: [
-          {
-                label: 'Upload Config',
-                accelerator: 'CommandOrControl+U',
-                click: (function() {
-                    return dialog.showOpenDialog({
-                        filters: [{
-                            name: 'otomeyt-config',
-                            extensions: ['otmyt']
-                        }]
-                    }, (fileNames) => {
-                        if (typeof(fileNames) === 'undefined') {
-                            dialog.showMessageBox({
-                                title: pjson.productName,
-                                message: "No Config Selected",
-                                detail: "No Config Selected",
-                                buttons: ["OK"]
-                            });
-                            return;
-                        }
+    let configClient = path.join(__dirname, 'config', 'site') + '/';
+    try {
+        fs.readFileSync(configClient);
+    } catch (err) {
+        configClient = configClient.replace(/app.asar/g, 'app.asar.unpacked');
+    }
 
-                        fs.copy(fileNames[0], path.join(__dirname, 'config', 'site', 'client', 'config.txt'), err => {
-                            if (err) {
-                                dialog.showMessageBox({
-                                    title: pjson.productName,
-                                    message: "An error ocurred reading the Config :" + err.message,
-                                    detail: "An error ocurred reading the Config :" + err.message,
-                                    buttons: ["OK"]
-                                });
+    fs.chmodSync(configClient, 0777);
+
+    const template = [
+        {
+            label: 'File',
+            submenu: [
+            {
+                    label: 'Upload Config',
+                    accelerator: 'CommandOrControl+U',
+                    click: (function() {
+                        return dialog.showOpenDialog({
+                            filters: [{
+                                name: 'otomeyt-config',
+                                extensions: ['otmyt']
+                            }]
+                        }, (fileNames) => {
+                            if (typeof(fileNames) === 'undefined') {
                                 return;
                             }
 
-                            fs.chmod(path.join(__dirname, 'config', 'site', 'client', 'config.txt'), 0775);
+                            fs.copy(fileNames[0], configClient + 'config.txt', err => {
+                                if (err) {
+                                    dialog.showMessageBox({
+                                        title: pjson.description,
+                                        message: "An error ocurred reading the config: " + err.message + "---" + configClient + "---" + fileNames[0],
+                                        buttons: ["OK"]
+                                    });
+                                    return;
+                                }
 
-                            dialog.showMessageBox({
-                                title: pjson.productName,
-                                message: "Upload Config Successful You can Now Use " + pjson.productName,
-                                detail: "Upload Config Successful You can Now Use " + pjson.productName,
-                                buttons: ["OK"]
+                                fs.chmodSync(configClient + 'config.txt', 0777);
+
+                                dialog.showMessageBox({
+                                    title: pjson.description,
+                                    message: "Upload config successful \nHit Refresh to use " + pjson.description,
+                                    buttons: ["OK"]
+                                });
+                                return;
                             });
-                            return;
                         });
-                    });
-                })
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Reload',
-                accelerator: 'CommandOrControl+R',
-                click: (function() {
-                    return mainWindow.loadURL(`file://${__dirname}/index.html`);
-                })
-            },
-            {
-                role: 'close'
-            }
-        ]
-    },
-    {
-        label: 'Edit',
-        submenu: [
-            {
-                role: 'undo'
-            },
-            {
-                role: 'redo'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'cut'
-            },
-            {
-                role: 'copy'
-            },
-            {
-                role: 'paste'
-            }
-        ]
-    },
-    {
-        label: 'View',
-        submenu: [
-            {
-                role: 'togglefullscreen'
-            },
-            {
-                role: 'minimize'
-            }
-        ]
-    },
-    {
-        label: 'Help',
-        submenu: [
-            {
-                label: 'About',
-                click: (function() {
-                    return dialog.showMessageBox(mainWindow, {
-                        title: pjson.productName,
-                        buttons: ["Ok"],
-                        message: pjson.productName,
-                        detail: "Version: " + pjson.version + "\nDevelop by: " + pjson.productTeam
-                    });
-                })
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: 'Submit Bugs',
-                click() {
-                    require('electron').shell.openExternal('http://bugs.otomeyt.com');
+                    })
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Reload',
+                    accelerator: 'CommandOrControl+R',
+                    click: (function() {
+                        return mainWindow.loadURL(`file://${__dirname}/index.html`);
+                    })
+                },
+                {
+                    role: 'close'
                 }
-            },
-            {
-                label: 'Admin Pannel',
-                click() {
-                    require('electron').shell.openExternal('http://admin.otomeyt.com');
+            ]
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                {
+                    role: 'undo'
+                },
+                {
+                    role: 'redo'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    role: 'cut'
+                },
+                {
+                    role: 'copy'
+                },
+                {
+                    role: 'paste'
                 }
-            },
-            {
-                label: 'About Otomeyt',
-                click() {
-                    require('electron').shell.openExternal('http://www.otomeyt.com');
+            ]
+        },
+        {
+            label: 'View',
+            submenu: [
+                {
+                    role: 'togglefullscreen'
+                },
+                {
+                    role: 'minimize'
                 }
-            }
-        ]
-    }
-  ]
-  menu.setApplicationMenu(menu.buildFromTemplate(template));
+            ]
+        },
+        {
+            label: 'Help',
+            submenu: [
+                {
+                    label: 'About',
+                    click: (function() {
+                        return dialog.showMessageBox(mainWindow, {
+                            title: pjson.description,
+                            buttons: ["Ok"],
+                            message: pjson.description,
+                            detail: "Version: " + pjson.version + "\nDevelop by: " + pjson.team
+                        });
+                    })
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Submit Bugs',
+                    click() {
+                        require('electron').shell.openExternal('http://bugs.otomeyt.com');
+                    }
+                },
+                {
+                    label: 'Admin Pannel',
+                    click() {
+                        require('electron').shell.openExternal('http://admin.otomeyt.com');
+                    }
+                },
+                {
+                    label: 'About Otomeyt',
+                    click() {
+                        require('electron').shell.openExternal('http://www.otomeyt.com');
+                    }
+                }
+            ]
+        }
+    ]
+
+    menu.setApplicationMenu(menu.buildFromTemplate(template));
 }
 
 // This method will be called when Electron has finished
@@ -188,9 +191,9 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-// On OS X it is common for applications and their menu bar
-// to stay active until the user quits explicitly with Cmd + Q
-if (process.platform !== 'darwin') {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
         app.quit();
     }
 });
